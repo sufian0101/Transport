@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gani Tempo Service — Transport All Over Navi Mumbai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171B;
+    --bg-elevated:#1B1F24;
+    --bg-soft:#20252B;
+    --text:#EDE9DE;
+    --text-muted:#9BA0A6;
+    --accent:#FFB300;
+    --accent-text:#181A1D;
+    --rust:#D9662C;
+    --border:#2B3036;
+    --border-strong:#3A4048;
+    --success:#5FAE6B;
+    --danger:#E15B4F;
+    --shadow: 0 18px 40px rgba(0,0,0,0.35);
+    --font-head:'Archivo Black', 'Barlow Condensed', sans-serif;
+    --font-cond:'Barlow Condensed', sans-serif;
+    --font-body:'Barlow', sans-serif;
+  }
+  html[data-theme="light"]{
+    --bg:#F2EEE3;
+    --bg-elevated:#FFFFFF;
+    --bg-soft:#E9E3D2;
+    --text:#1B1D20;
+    --text-muted:#5B5F63;
+    --accent:#C6491D;
+    --accent-text:#FBF7EC;
+    --rust:#C6491D;
+    --border:#DAD3BE;
+    --border-strong:#C7BEA2;
+    --success:#2F7D3D;
+    --danger:#B93B2E;
+    --shadow: 0 18px 40px rgba(30,25,10,0.12);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.55;
+    transition:background .25s ease, color .25s ease;
+    overflow-x:hidden;
+  }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  button, input, select, textarea{font-family:inherit; font-size:1rem;}
+
+  .wrap{
+    max-width:1120px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- route-line divider ---------- */
+  .route-line{
+    height:3px;
+    width:100%;
+    background-image: repeating-linear-gradient(90deg, var(--accent) 0 22px, transparent 22px 38px);
+    opacity:.85;
+  }
+  .route-line.thin{height:2px; opacity:.5;}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:500;
+    background:color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{width:56px; height:33px; flex-shrink:0; overflow:visible;}
+  .brand-mark .truck-body{animation:truck-bob .9s ease-in-out infinite;}
+  .brand-mark .wheel-spin{animation:wheel-spin .6s linear infinite;}
+  @keyframes truck-bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-1px);}
+  }
+  @keyframes wheel-spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .brand-mark .truck-body, .brand-mark .wheel-spin{animation:none;}
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.05;}
+  .brand-text b{
+    font-family:var(--font-head);
+    font-size:1rem;
+    letter-spacing:.01em;
+  }
+  .brand-text span{
+    font-family:var(--font-cond);
+    font-size:.72rem;
+    color:var(--accent);
+    font-weight:600;
+    letter-spacing:.06em;
+  }
+  nav.links{display:flex; align-items:center; gap:28px;}
+  nav.links a{
+    font-family:var(--font-cond);
+    font-weight:600;
+    font-size:1.02rem;
+    color:var(--text-muted);
+    transition:color .15s ease;
+    white-space:nowrap;
+  }
+  nav.links a:hover{color:var(--text);}
+  .nav-right{display:flex; align-items:center; gap:14px;}
+  .phone-chip{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--font-cond); font-weight:700; font-size:1.02rem;
+    background:var(--accent); color:var(--accent-text);
+    padding:8px 14px; border-radius:3px;
+    white-space:nowrap;
+  }
+  .theme-toggle{
+    width:44px; height:26px; border-radius:20px;
+    background:var(--bg-soft); border:1px solid var(--border-strong);
+    position:relative; cursor:pointer; flex-shrink:0;
+  }
+  .theme-toggle .knob{
+    position:absolute; top:2px; left:2px;
+    width:20px; height:20px; border-radius:50%;
+    background:var(--accent);
+    transition:left .2s ease;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px;
+  }
+  html[data-theme="light"] .theme-toggle .knob{left:20px;}
+  .burger{
+    display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px;
+  }
+  .burger span{width:24px; height:2px; background:var(--text);}
+  .mobile-panel{
+    display:none;
+    position:absolute; top:100%; left:0; right:0;
+    background:var(--bg-elevated);
+    border-bottom:1px solid var(--border);
+    box-shadow:var(--shadow);
+    flex-direction:column;
+    padding:10px 24px 20px;
+  }
+  .mobile-panel a{
+    padding:12px 0; border-bottom:1px solid var(--border);
+    font-family:var(--font-cond); font-weight:600; font-size:1.1rem;
+  }
+  .mobile-panel.open{display:flex;}
+
+  @media (max-width:860px){
+    nav.links{display:none;}
+    .burger{display:flex;}
+    .phone-chip span.long{display:none;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    padding:88px 0 64px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.15fr .85fr; gap:50px; align-items:center;
+  }
+  .kicker{
+    font-family:var(--font-cond); font-weight:700; font-size:1.05rem;
+    color:var(--rust); margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .kicker .dot{width:8px; height:8px; border-radius:50%; background:var(--accent); display:inline-block;}
+  h1{
+    font-family:var(--font-head);
+    font-size:clamp(2.3rem, 5.4vw, 4rem);
+    line-height:1.02;
+    letter-spacing:-.01em;
+    text-transform:uppercase;
+    margin-bottom:20px;
+  }
+  h1 em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  .hero-sub{
+    font-size:1.15rem;
+    color:var(--text-muted);
+    max-width:46ch;
+    margin-bottom:30px;
+  }
+  .cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:14px 26px; border-radius:3px;
+    font-family:var(--font-cond); font-weight:700; font-size:1.12rem;
+    cursor:pointer; border:2px solid transparent;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--accent); color:var(--accent-text);}
+  .btn-outline{border-color:var(--border-strong); color:var(--text); background:transparent;}
+  .btn-outline:hover{border-color:var(--accent);}
+  .btn-block{width:100%; justify-content:center;}
+
+  .hero-panel{
+    background:var(--bg-elevated);
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:26px;
+    box-shadow:var(--shadow);
+  }
+  .hero-panel .van{width:100%; height:auto; margin-bottom:18px; overflow:visible;}
+  .hero-truck-body{animation:truck-bob-lg .95s ease-in-out infinite;}
+  .hero-wheel-spin{animation:wheel-spin .6s linear infinite;}
+  @keyframes truck-bob-lg{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-2px);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-truck-body, .hero-wheel-spin{animation:none;}
+  }
+  .fact-line{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:11px 0; border-bottom:1px dashed var(--border-strong);
+    font-family:var(--font-cond); font-weight:600; font-size:1.03rem;
+  }
+  .fact-line:last-child{border-bottom:none;}
+  .fact-line b{color:var(--accent); font-size:1.15rem;}
+
+  /* ---------- section shell ---------- */
+  section{padding:70px 0;}
+  .section-head{margin-bottom:38px; max-width:60ch;}
+  .eyebrow{
+    font-family:var(--font-cond); font-weight:700; color:var(--rust); font-size:1.02rem; margin-bottom:8px;
+  }
+  h2{
+    font-family:var(--font-head);
+    font-size:clamp(1.7rem,3.4vw,2.5rem);
+    text-transform:uppercase;
+    letter-spacing:-.005em;
+    margin-bottom:10px;
+  }
+  .section-desc{color:var(--text-muted); font-size:1.05rem;}
+
+  /* ---------- service area (route stops) ---------- */
+  .route-track{
+    position:relative;
+    padding-left:26px;
+    border-left:3px dashed var(--border-strong);
+  }
+  .stop{
+    position:relative;
+    padding:0 0 30px 22px;
+  }
+  .stop:last-child{padding-bottom:0;}
+  .stop::before{
+    content:'';
+    position:absolute; left:-37px; top:4px;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--accent); border:3px solid var(--bg);
+    box-shadow:0 0 0 2px var(--accent);
+  }
+  .stop b{font-family:var(--font-cond); font-weight:700; font-size:1.18rem;}
+  .stop span{color:var(--text-muted); font-size:.98rem;}
+  .area-note{
+    margin-top:28px; padding:18px 20px; background:var(--bg-soft);
+    border-left:3px solid var(--accent); border-radius:2px; color:var(--text-muted);
+  }
+
+  /* ---------- services ---------- */
+  .service-list{border-top:1px solid var(--border);}
+  .service-row{
+    display:grid; grid-template-columns:56px 1fr; gap:20px;
+    padding:26px 0; border-bottom:1px solid var(--border);
+    align-items:flex-start;
+  }
+  .service-row .icon{
+    width:52px; height:52px; border-radius:50%;
+    background:var(--bg-soft); border:1px solid var(--border-strong);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .service-row .icon svg{width:26px; height:26px; stroke:var(--accent);}
+  .service-row h3{
+    font-family:var(--font-cond); font-weight:700; font-size:1.32rem; margin-bottom:6px;
+  }
+  .service-row p{color:var(--text-muted); max-width:60ch;}
+
+  /* ---------- why us / trust plates ---------- */
+  .plates{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
+  .plate{
+    background:var(--bg-elevated); border:1px solid var(--border);
+    border-radius:5px; padding:24px;
+  }
+  .plate .num{
+    font-family:var(--font-head); font-size:2rem; color:var(--accent); margin-bottom:6px;
+  }
+  .plate h4{font-family:var(--font-cond); font-weight:700; font-size:1.1rem; margin-bottom:6px;}
+  .plate p{color:var(--text-muted); font-size:.95rem;}
+  @media(max-width:760px){.plates{grid-template-columns:1fr;}}
+
+  /* ---------- booking ---------- */
+  .booking-wrap{
+    display:grid; grid-template-columns:1fr 1.3fr; gap:44px; align-items:flex-start;
+  }
+  .booking-side h2{margin-bottom:14px;}
+  .booking-side p{color:var(--text-muted); margin-bottom:22px;}
+  .side-fact{display:flex; gap:12px; align-items:flex-start; margin-bottom:18px;}
+  .side-fact svg{width:22px; height:22px; stroke:var(--accent); flex-shrink:0; margin-top:2px;}
+  .side-fact b{font-family:var(--font-cond); font-weight:700; display:block;}
+  .side-fact span{color:var(--text-muted); font-size:.94rem;}
+
+  .form-card{
+    background:var(--bg-elevated); border:1px solid var(--border);
+    border-radius:8px; padding:32px; box-shadow:var(--shadow);
+  }
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .field{display:flex; flex-direction:column; gap:6px; margin-bottom:16px;}
+  .field.full{grid-column:1/-1;}
+  .field label{font-family:var(--font-cond); font-weight:600; font-size:.95rem; color:var(--text-muted);}
+  .field input, .field select, .field textarea{
+    background:var(--bg-soft); border:1px solid var(--border-strong);
+    color:var(--text); padding:11px 13px; border-radius:4px;
+    outline:none; transition:border-color .15s ease;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{border-color:var(--accent);}
+  .field textarea{resize:vertical; min-height:70px;}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
+
+  .form-msg{
+    margin-top:14px; padding:14px 16px; border-radius:5px; font-family:var(--font-cond); font-weight:600;
+    display:none;
+  }
+  .form-msg.show{display:block;}
+  .form-msg.ok{background:color-mix(in srgb, var(--success) 18%, var(--bg-elevated)); color:var(--success); border:1px solid var(--success);}
+  .form-msg.err{background:color-mix(in srgb, var(--danger) 18%, var(--bg-elevated)); color:var(--danger); border:1px solid var(--danger);}
+
+  @media(max-width:900px){.booking-wrap{grid-template-columns:1fr;}}
+
+  /* ---------- admin ---------- */
+  .admin-card{
+    background:var(--bg-elevated); border:1px solid var(--border);
+    border-radius:8px; padding:32px; box-shadow:var(--shadow);
+  }
+  .admin-login{max-width:360px;}
+  .admin-note{color:var(--text-muted); font-size:.9rem; margin-top:10px;}
+  .admin-table-wrap{overflow-x:auto; margin-top:10px;}
+  table.bookings{width:100%; border-collapse:collapse; min-width:820px;}
+  table.bookings th, table.bookings td{
+    text-align:left; padding:11px 10px; border-bottom:1px solid var(--border); font-size:.92rem; vertical-align:top;
+  }
+  table.bookings th{
+    font-family:var(--font-cond); font-weight:700; color:var(--text-muted); font-size:.85rem;
+    text-transform:uppercase; letter-spacing:.03em;
+  }
+  table.bookings select{
+    background:var(--bg-soft); border:1px solid var(--border-strong); color:var(--text);
+    padding:6px 8px; border-radius:4px;
+  }
+  .del-btn{
+    background:none; border:1px solid var(--danger); color:var(--danger);
+    padding:6px 10px; border-radius:4px; cursor:pointer; font-family:var(--font-cond); font-weight:600;
+  }
+  .admin-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;}
+  .badge{
+    display:inline-block; padding:3px 10px; border-radius:20px; font-size:.8rem; font-family:var(--font-cond); font-weight:700;
+  }
+  .badge.Pending{background:color-mix(in srgb, var(--accent) 25%, transparent); color:var(--accent);}
+  .badge.Confirmed{background:color-mix(in srgb, var(--success) 25%, transparent); color:var(--success);}
+  .badge.Completed{background:color-mix(in srgb, var(--text-muted) 25%, transparent); color:var(--text-muted);}
+  .empty-state{color:var(--text-muted); padding:20px 0;}
+  .logout-link{font-family:var(--font-cond); font-weight:600; color:var(--rust); cursor:pointer;}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--bg-elevated); border-top:1px solid var(--border); padding:54px 0 26px; margin-top:20px;}
+  .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px; margin-bottom:40px;}
+  .foot-brand p{color:var(--text-muted); margin-top:12px; max-width:36ch;}
+  .foot-col h5{font-family:var(--font-cond); font-weight:700; font-size:1.05rem; margin-bottom:14px;}
+  .foot-col a, .foot-col span{display:block; color:var(--text-muted); margin-bottom:10px; font-size:.96rem;}
+  .foot-col a:hover{color:var(--accent);}
+  .foot-bottom{
+    border-top:1px solid var(--border); padding-top:20px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    color:var(--text-muted); font-size:.86rem;
+  }
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr; gap:28px;}}
+
+  .whatsapp-fab{
+    position:fixed; bottom:22px; right:22px; z-index:400;
+    width:56px; height:56px; border-radius:50%;
+    background:#25D366; display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow); cursor:pointer;
+  }
+  .whatsapp-fab svg{width:28px; height:28px;}
+
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-panel{order:-1;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row wrap">
+    <a href="#top" class="brand">
+      <svg class="brand-mark" viewBox="0 0 220 130" xmlns="http://www.w3.org/2000/svg">
+        <g class="truck-body">
+          <rect x="14" y="28" width="118" height="72" rx="7" fill="#E8734A"/>
+          <rect x="14" y="28" width="118" height="14" rx="7" fill="#EE875F" opacity=".6"/>
+          <path d="M132,100 L132,60 Q132,50 142,50 L160,50 Q170,50 177,57 L195,79 Q198,83 198,89 L198,100 Z" fill="#E8734A"/>
+          <path d="M140,58 Q136,58 136,64 L136,88 Q136,92 140,92 L181,92 L181,79 L169,64 Q165,58 158,58 Z" fill="#1E2733"/>
+          <path d="M141,60 L153,60 L138,84 L138,72 Z" fill="#F3EFE4" opacity=".85"/>
+          <rect x="129" y="52" width="4" height="11" rx="2" fill="#1E2733"/>
+          <rect x="146" y="82" width="9" height="3" rx="1.5" fill="#1E2733"/>
+          <rect x="188" y="86" width="9" height="11" rx="3" fill="#F3EFE4"/>
+          <rect x="10" y="98" width="192" height="12" rx="3" fill="#1E2733"/>
+          <g class="wheel">
+            <circle cx="52" cy="112" r="15" fill="#F3EFE4" stroke="#1E2733" stroke-width="3"/>
+            <g class="wheel-spin" style="transform-origin:52px 112px">
+              <path transform="translate(44,104) scale(0.68)" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#1E2733"/>
+            </g>
+          </g>
+          <g class="wheel">
+            <circle cx="160" cy="112" r="15" fill="#F3EFE4" stroke="#1E2733" stroke-width="3"/>
+            <g class="wheel-spin" style="transform-origin:160px 112px">
+              <path transform="translate(152,104) scale(0.68)" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#1E2733"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <span class="brand-text"><b>GANI TEMPO SERVICE</b><span>Navi Mumbai Transport</span></span>
+    </a>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#area">Service Area</a>
+      <a href="#booking">Book Now</a>
+      <a href="#contact">Contact</a>
+      <a href="#admin">Admin</a>
+    </nav>
+    <div class="nav-right">
+      <a class="phone-chip" href="tel:+919820171473">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <span class="long">+91 98201 71473
+
+        </span>
+      </a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light mode"><span class="knob">☀</span></button>
+      <button class="burger" id="burgerBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="#services">Services</a>
+    <a href="#area">Service Area</a>
+    <a href="#booking">Book Now</a>
+    <a href="#contact">Contact</a>
+    <a href="#admin">Admin</a>
+    <a href="tel:+919820171473">Call +91 98201 71473</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker"><span class="dot"></span>Local Tempo &amp; Truck Transport</p>
+        <h1>Load It ,<br>Move It🔥<br><br><em>All Over Navi Mumbai.</em></h1>
+        <p class="hero-sub">Gani Tempo Service moves homes, offices, shops and goods across Navi Mumbai — Vashi to Panvel and every stop between. One call, and the tempo is on the way.</p>
+        <div class="cta-row">
+          <a href="#booking" class="btn btn-primary">Book a Tempo</a>
+          <a href="tel:+919820171473" class="btn btn-outline">Call Now — +91 98201 71473</a>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <svg class="van" viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg">
+          <g class="hero-truck-body">
+            <rect x="20" y="42" width="172" height="105" rx="10" fill="#E8734A"/>
+            <rect x="20" y="42" width="172" height="20" rx="10" fill="#EE875F" opacity=".6"/>
+            <path d="M192,147 L192,88 Q192,74 206,74 L232,74 Q246,74 256,84 L282,115 Q286,121 286,129 L286,147 Z" fill="#E8734A"/>
+            <path d="M203,84 Q197,84 197,92 L197,128 Q197,134 203,134 L262,134 L262,115 L245,92 Q239,84 229,84 Z" fill="#1E2733"/>
+            <path d="M204,87 L222,87 L200,122 L200,105 Z" fill="#F3EFE4" opacity=".85"/>
+            <rect x="187" y="76" width="6" height="16" rx="3" fill="#1E2733"/>
+            <rect x="211" y="119" width="13" height="4.5" rx="2.2" fill="#1E2733"/>
+            <rect x="272" y="124" width="13" height="16" rx="4" fill="#F3EFE4"/>
+            <rect x="14" y="144" width="278" height="17" rx="4" fill="#1E2733"/>
+            <text x="35" y="98" font-family="Archivo Black" font-size="19" fill="#FBF3E9">GANI TEMPO</text>
+            <g class="hero-wheel">
+              <circle cx="80" cy="161" r="21" fill="#F3EFE4" stroke="#1E2733" stroke-width="4"/>
+              <g class="hero-wheel-spin" style="transform-origin:80px 161px">
+                <path transform="translate(68,149) scale(0.95)" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#1E2733"/>
+              </g>
+            </g>
+            <g class="hero-wheel">
+              <circle cx="232" cy="161" r="21" fill="#F3EFE4" stroke="#1E2733" stroke-width="4"/>
+              <g class="hero-wheel-spin" style="transform-origin:232px 161px">
+                <path transform="translate(220,149) scale(0.95)" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="#1E2733"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+        <div class="fact-line"><span>Response time</span><b>Under 60 min</b></div>
+        <div class="fact-line"><span>Vehicles available</span><b>Tata Ace · 407 · Pickup</b></div>
+        <div class="fact-line"><span>Coverage</span><b>All Navi Mumbai</b></div>
+        <div class="fact-line"><span>Booking</span><b>Call or online</b></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="route-line"></div>
+
+  <!-- SERVICE AREA -->
+  <section id="area">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Where we drive</p>
+        <h2>Service Area — All Over Navi Mumbai</h2>
+        <p class="section-desc">If it's in Navi Mumbai, we'll get the tempo there. Our regular route covers every major node, with same-day pickup in most areas.</p>
+      </div>
+      <div class="route-track" id="routeTrack"></div>
+      <p class="area-note">Not on this list? Call us anyway — we also cover nearby stretches of Thane and Panvel taluka on request.</p>
+    </div>
+  </section>
+
+  <div class="route-line thin"></div>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">What we carry</p>
+        <h2>Services</h2>
+        <p class="section-desc">From a single almirah to a full house shift — the right vehicle and the right hands for the job.</p>
+      </div>
+      <div class="service-list" id="serviceList"></div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Why Gani Tempo Service</p>
+        <h2>Built on trust, run on time</h2>
+      </div>
+      <div class="plates">
+        <div class="plate"><div class="num">28+ Yrs</div><h4>On the road</h4><p>Years of local shifting and goods transport experience across Navi Mumbai.</p></div>
+        <div class="plate"><div class="num">Fixed</div><h4>Upfront rates</h4><p>You're quoted the fare before the tempo leaves — no surprises on delivery.</p></div>
+        <div class="plate"><div class="num">Door</div><h4>To door service</h4><p>Loading and unloading labour included, so you don't lift a finger.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="route-line"></div>
+
+  <!-- BOOKING -->
+  <section id="booking">
+    <div class="wrap booking-wrap">
+      <div class="booking-side">
+        <p class="eyebrow">Appointment</p>
+        <h2>Book Your Tempo</h2>
+        <p>Fill in your pickup details and preferred time — our team will call your mobile number to confirm the vehicle and final rate.</p>
+        <div class="side-fact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span><b>Prefer to call?</b><span>+91 98201 71473 — 7 AM to 11 PM, Everyday Of Week.</span></span>
+        </div>
+        <div class="side-fact">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          <span><b>Or write to us</b><span>ganitemposervice@gmail.com</span></span>
+        </div>
+      </div>
+
+      <form class="form-card" id="bookingForm">
+        <div class="form-grid">
+          <div class="field"><label for="name">Full name</label><input type="text" id="name" required placeholder="Your name"></div>
+          <div class="field"><label for="mobile">Mobile number</label><input type="tel" id="mobile" required pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number"></div>
+          <div class="field"><label for="email">Email (optional)</label><input type="email" id="email" placeholder="you@example.com"></div>
+          <div class="field"><label for="vehicle">Vehicle type</label>
+            <select id="vehicle" required>
+              <option value="">Select vehicle</option>
+              <option>Mini Tempo (Tata Ace)</option>
+              <option>Tempo 407</option>
+              <option>Pickup Van</option>
+              <option>Not sure — advise me</option>
+            </select>
+          </div>
+          <div class="field"><label for="pickup">Pickup address</label><input type="text" id="pickup" required placeholder="Pickup location, Navi Mumbai"></div>
+          <div class="field"><label for="drop">Drop address</label><input type="text" id="drop" required placeholder="Drop location"></div>
+          <div class="field"><label for="date">Preferred date</label><input type="date" id="date" required></div>
+          <div class="field"><label for="time">Preferred time</label><input type="time" id="time" required></div>
+          <div class="field full"><label for="notes">Goods / notes</label><textarea id="notes" placeholder="What are you moving? Any floor / lift details?"></textarea></div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Confirm Booking</button>
+        <div class="form-msg" id="formMsg"></div>
+      </form>
+    </div>
+  </section>
+
+  <div class="route-line thin"></div>
+
+  <!-- ADMIN -->
+  <section id="admin">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Staff only</p>
+        <h2>Admin</h2>
+        <p class="section-desc">View and manage customer appointments.</p>
+      </div>
+
+      <div class="admin-card">
+        <div id="adminLogin" class="admin-login">
+          <div class="field">
+            <label for="adminPass">Admin password</label>
+            <input type="password" id="adminPass" placeholder="Enter password">
+          </div>
+          <button class="btn btn-primary" id="adminLoginBtn">View Bookings</button>
+          <p class="admin-note">Demo access code: <b>gani2026</b> — change this before the site goes live.</p>
+        </div>
+
+        <div id="adminDashboard" style="display:none;">
+          <div class="admin-top">
+            <span class="admin-note" id="bookingCount" style="margin:0;"></span>
+            <span class="logout-link" id="adminLogout">Log out</span>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="bookings">
+              <thead>
+                <tr><th>Customer</th><th>Mobile</th><th>Route</th><th>Date &amp; time</th><th>Vehicle</th><th>Status</th><th></th></tr>
+              </thead>
+              <tbody id="bookingsBody"></tbody>
+            </table>
+          </div>
+          <p class="empty-state" id="emptyState" style="display:none;">No bookings yet. New appointments will appear here.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<a class="whatsapp-fab" href="https://wa.me/919820171473" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="#fff"><path d="M16 3C9 3 3.3 8.7 3.3 15.7c0 2.5.7 4.8 1.9 6.8L3 29l6.7-2.1c1.9 1 4.1 1.6 6.3 1.6 7 0 12.7-5.7 12.7-12.7C28.7 8.7 23 3 16 3zm0 23.1c-2 0-3.9-.5-5.5-1.5l-.4-.2-4 1.3 1.3-3.9-.3-.4a10.5 10.5 0 0 1-1.6-5.6C5.5 9.9 10.2 5.2 16 5.2S26.5 9.9 26.5 15.7 21.8 26.1
+
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+919820171473">📞 +91 98201 71473</a>
+        <a href="mailto:ganitemposervice@gmail.com">✉ ganitemposervice@gmail.com</a>
+        <span>📍 Navi Mumbai, Maharashtra</span>
+      </div>
+      <div class="foot-col">
+        <h5>Quick links</h5>
+        <a href="#services">Services</a>
+        <a href="#area">Service area</a>
+        <a href="#booking">Book a tempo</a>
+        <a href="#admin">Admin</a>
+      </div>
+    </div>
+    <div class="route-line thin" style="margin-bottom:20px;"></div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> Gani Tempo Service. All rights reserved.</span>
+      <span>Serving Vashi to Panvel, all over Navi Mumbai.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---------------- theme ---------------- */
+const root = document.documentElement;
+const toggle = document.getElementById('themeToggle');
+function applyTheme(t){
+  root.setAttribute('data-theme', t);
+  toggle.querySelector('.knob').textContent = t === 'dark' ? '☀' : '☾';
+}
+const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+applyTheme(prefersLight ? 'light' : 'dark');
+toggle.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+});
+
+/* ---------------- mobile nav ---------------- */
+const burger = document.getElementById('burgerBtn');
+const panel = document.getElementById('mobilePanel');
+burger.addEventListener('click', () => panel.classList.toggle('open'));
+panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => panel.classList.remove('open')));
+
+/* ---------------- service area stops ---------------- */
+const stops = [
+  ['Vashi', 'Central hub, quick pickup'],
+  ['Sanpada & Nerul', 'Fastest shifting'],
+  ['CBD Belapur', 'Office & home relocation'],
+  ['Kharghar', 'Full house shifting'],
+  ['Kalamboli ', 'Long-route goods transport'],
+  ['Kopar Khairane ', 'Shop & warehouse loads'],
+  ['Airoli ', 'Industrial & MIDC pickup'],
+  ['Seawoods ', 'Door-to-door delivery'],
+  [' Turbhe', 'Door-to-door delivery'],
+  ['Ghansoli','goods transport'],
+  ['Rabale','Fast transport'],
+  ['Airoli','goods transport'],
+  ['Digha','Better Experience'],
+  ['Mansarovar','goods transport'],
+  ['Taloja','Pickup and Delivery'],
+  ['Kalamboli','Healthy transport'],
+  ['Panvel','Rapid Work']
+];
+const track = document.getElementById('routeTrack');
+stops.forEach(([name, note]) => {
+  const div = document.createElement('div');
+  div.className = 'stop';
+  div.innerHTML = `<b>${name}</b><br><span>${note}</span>`;
+  track.appendChild(div);
+});
+
+/* ---------------- services ---------------- */
+const services = [
+  ['Home & Office Shifting', 'Full house or office relocation with careful packing, loading and safe unloading at the new address.', 'M3 9l9-6 9 6v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z'],
+  ['Goods & Material Transport', 'Regular and one-time transport of shop stock, construction material, furniture and machinery.', 'M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'],
+  ['Same-Day / Urgent Delivery', 'Need it moved today? Priority booking for urgent pickups anywhere in Navi Mumbai.', 'M13 2L3 14h7l-1 8 10-12h-7l1-8z'],
+  ['Long Route & Nearby Transport', 'Trips beyond Navi Mumbai on request, covering nearby Thane and Panvel taluka areas.', 'M9 20l-5.5-2V6L9 4m0 16l6 2m-6-2V4m6 18l5.5-2V4L15 6m0 14V4'],
+];
+const list = document.getElementById('serviceList');
+services.forEach(([title, desc, path]) => {
+  const row = document.createElement('div');
+  row.className = 'service-row';
+  row.innerHTML = `
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${path}"/></svg></div>
+    <div><h3>${title}</h3><p>${desc}</p></div>`;
+  list.appendChild(row);
+});
+
+/* ---------------- booking storage ---------------- */
+const STORAGE_KEY = 'gani_bookings_v1';
+
+async function loadBookings(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, true);
+    return res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){
+    return [];
+  }
+}
+async function saveBookings(list){
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify(list), true);
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+const bookingForm = document.getElementById('bookingForm');
+const formMsg = document.getElementById('formMsg');
+
+bookingForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const submitBtn = bookingForm.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Booking...';
+
+  const booking = {
+    id: 'B' + Date.now(),
+    name: document.getElementById('name').value.trim(),
+    mobile: document.getElementById('mobile').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    vehicle: document.getElementById('vehicle').value,
+    pickup: document.getElementById('pickup').value.trim(),
+    drop: document.getElementById('drop').value.trim(),
+    date: document.getElementById('date').value,
+    time: document.getElementById('time').value,
+    notes: document.getElementById('notes').value.trim(),
+    status: 'Pending',
+    createdAt: new Date().toISOString(),
+  };
+
+  try{
+    const current = await loadBookings();
+    current.unshift(booking);
+    const ok = await saveBookings(current);
+    formMsg.className = 'form-msg show ' + (ok ? 'ok' : 'err');
+    formMsg.textContent = ok
+      ? `Booking received! We'll call ${booking.mobile} shortly to confirm your ${booking.vehicle || 'tempo'}.`
+      : 'Something went wrong saving your booking. Please call us directly at +91 9820171473.';
+    if(ok){ bookingForm.reset(); }
+  }catch(err){
+    formMsg.className = 'form-msg show err';
+    formMsg.textContent = 'Something went wrong. Please call us directly at +91 9820171473.';
+  }finally{
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Confirm Booking';
+  }
+});
+
+/* ---------------- admin ---------------- */
+const ADMIN_PASSWORD = 'gani2026';
+const adminLogin = document.getElementById('adminLogin');
+const adminDashboard = document.getElementById('adminDashboard');
+const adminPass = document.getElementById('adminPass');
+const bookingsBody = document.getElementById('bookingsBody');
+const bookingCount = document.getElementById('bookingCount');
+const emptyState = document.getElementById('emptyState');
+
+document.getElementById('adminLoginBtn').addEventListener('click', async () => {
+  if(adminPass.value === ADMIN_PASSWORD){
+    adminLogin.style.display = 'none';
+    adminDashboard.style.display = 'block';
+    await renderBookings();
+  }else{
+    adminPass.style.borderColor = 'var(--danger)';
+    adminPass.placeholder = 'Incorrect password';
+    adminPass.value = '';
+  }
+});
+adminPass.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') document.getElementById('adminLoginBtn').click();
+});
+document.getElementById('adminLogout').addEventListener('click', () => {
+  adminDashboard.style.display = 'none';
+  adminLogin.style.display = 'block';
+  adminPass.value = '';
+});
+
+async function renderBookings(){
+  const list = await loadBookings();
+  bookingsBody.innerHTML = '';
+  bookingCount.textContent = list.length + (list.length === 1 ? ' booking' : ' bookings');
+  emptyState.style.display = list.length ? 'none' : 'block';
+
+  list.forEach((b) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><b>${escapeHtml(b.name)}</b>${b.email ? '<br><span style="color:var(--text-muted)">'+escapeHtml(b.email)+'</span>' : ''}</td>
+      <td><a href="tel:${escapeHtml(b.mobile)}">${escapeHtml(b.mobile)}</a></td>
+      <td>${escapeHtml(b.pickup)} → ${escapeHtml(b.drop)}</td>
+      <td>${escapeHtml(b.date)} ${escapeHtml(b.time)}</td>
+      <td>${escapeHtml(b.vehicle || '—')}</td>
+      <td><span class="badge ${b.status}">${b.status}</span></td>
+      <td></td>`;
+
+    const statusTd = tr.children[5];
+    const select = document.createElement('select');
+    ['Pending','Confirmed','Completed'].forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s; opt.textContent = s;
+      if(s === b.status) opt.selected = true;
+      select.appendChild(opt);
+    });
+    select.addEventListener('change', async () => {
+      const all = await loadBookings();
+      const item = all.find(x => x.id === b.id);
+      if(item){ item.status = select.value; await saveBookings(all); await renderBookings(); }
+    });
+    statusTd.innerHTML = '';
+    statusTd.appendChild(select);
+
+    const actionTd = tr.children[6];
+    const delBtn = document.createElement('button');
+    delBtn.className = 'del-btn';
+    delBtn.textContent = 'Delete';
+    delBtn.addEventListener('click', async () => {
+      const all = await loadBookings();
+      const filtered = all.filter(x => x.id !== b.id);
+      await saveBookings(filtered);
+      await renderBookings();
+    });
+    actionTd.appendChild(delBtn);
+
+    bookingsBody.appendChild(tr);
+  });
+}
+
+function escapeHtml(str){
+  return String(str || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+</script>
+
+</body>
+</html>
